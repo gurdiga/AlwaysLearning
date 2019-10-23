@@ -44,6 +44,7 @@ author: >-
   #{initial_message["author"]}
 slug: "#{initial_message["id"]}"
 excerpt_separator: <!--there-is-no-excerpt-separator-expected-ever-->
+description: ""
 ---
 {% raw %}
 #{body}
