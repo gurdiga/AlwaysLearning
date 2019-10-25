@@ -26,7 +26,7 @@ cache:
 .PHONY: cache
 
 clean:
-	rm -v \
+	rm -vf \
 		cache/topics.json \
 		cache/topic-`jq .ygData.lastTopic cache/topics.json`.json
 
