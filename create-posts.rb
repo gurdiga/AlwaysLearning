@@ -16,9 +16,15 @@ def main
     end
 end
 
+BAD_TOPICS = [21757]
+
 def create_post(json)
     messages = json["ygData"]["messages"].reverse.map { |m| get_post_data(m) }
     initial_message = messages.first
+
+    return if BAD_TOPICS.include? initial_message["id"]
+
+    last_message = messages.last
 
     responses = messages - [initial_message]
 
@@ -39,7 +45,7 @@ def create_post(json)
 layout: post
 title: >-
   #{initial_message["title"]}
-date: #{initial_message["time"].to_s}
+date: #{last_message["time"].to_s}
 author: >-
   #{initial_message["author"]}
 slug: "#{initial_message["id"]}"
