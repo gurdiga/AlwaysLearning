@@ -45,6 +45,6 @@ upload:
 	lftp -u gurdiga@sandradodd.com ftp.sandradodd.com \
 		--password $(LFTP_PASSWORD) \
 		-e '\
-			mirror --delete --reverse --parallel=5 _site archive/AlwaysLearning; \
+			mirror --delete --reverse --parallel=5 --continue _site archive/AlwaysLearning; \
 			quit \
 		'
