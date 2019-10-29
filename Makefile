@@ -48,3 +48,15 @@ upload:
 			mirror --delete --reverse --parallel=5 --continue _site archive/AlwaysLearning; \
 			quit \
 		'
+
+copy:
+	lftp -u gurdiga@sandradodd.com ftp.sandradodd.com \
+		--password $(LFTP_PASSWORD) \
+		-e 'mirror \
+				--continue \
+				--parallel=5 \
+				--exclude-glob=archive/* \
+				--exclude-glob=logs/* \
+				. site; \
+			quit \
+		'
