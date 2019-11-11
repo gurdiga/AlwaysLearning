@@ -59,4 +59,10 @@ copy:
 				--exclude-glob=logs/* \
 				. site; \
 			quit \
-		'
+		' \
+	&& rsync -az site root@sd.homeschooling.md:/var/www/ \
+	&& ssh root@sd.homeschooling.md "\
+		find /var/www/site/ -type f -name '*.html' | \
+		xargs sed -i --regexp-extended \
+			-e 's|http://(www\.)?sandradodd\.com|https://sd\.homeschooling\.md|ig'\
+	"
