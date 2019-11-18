@@ -16,7 +16,7 @@
 title: Always Learning
 email:
 description:
-baseurl: "/archive/AlwaysLearning" # the subpath of your site, e.g. /blog
+baseurl: "/AlwaysLearning" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 permalink: /topic/:slug/
 show_excerpts: false
