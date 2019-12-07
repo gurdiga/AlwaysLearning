@@ -66,6 +66,9 @@ copy:
 			sed -i --regexp-extended -e 's|http://(www\.)?sandradodd\.com|https://sd\.homeschooling\.md|ig' \
 	"
 	time ssh root@sd.homeschooling.md "\
+		sed -i --regexp-extended -e 's|http://feeds\.feedburner\.com|https://feeds\.feedburner\.com|g' /var/www/site/index.html \
+	"
+	time ssh root@sd.homeschooling.md "\
 		find /var/www/site/ -type f -name '*.html' | xargs \
 			sed -i -e 's|charset=iso-8859-1|charset=utf-8|ig' \
 	"
