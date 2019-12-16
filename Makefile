@@ -1,4 +1,7 @@
-default: posts
+default: ssh
+
+ssh:
+	ssh root@ssh.sandradodd.com
 
 build:
 	bundle exec jekyll build --incremental
@@ -49,7 +52,9 @@ upload:
 			quit \
 		'
 
-copy:
+copy: download rsync relative-links feedburner charset encoding
+
+download:
 	time lftp -u gurdiga@sandradodd.com ftp.sandradodd.com \
 		--password $(LFTP_PASSWORD) \
 		-e "mirror \
@@ -60,20 +65,39 @@ copy:
 				. site; \
 			quit \
 		"
-	time rsync -az site root@sd.homeschooling.md:/var/www/
-	time ssh root@sd.homeschooling.md "\
+rsync:
+	time rsync -az site root@ssh.sandradodd.com:/var/www/
+
+misc-fixes:
+	mv /var/www/site/plants/falseseaonion.jpg /var/www/site/plants/falseseaonion.html
+	mv /var/www/site/animals/dogsandcats /var/www/site/animals/dogsandcats.html
+
+relative-links:
+	time ssh root@ssh.sandradodd.com "\
+		find /var/www/site/ -type f -name '*.htm*' | xargs \
+			sed -i --regexp-extended -e 's|http://(www\.)?sandradodd\.com/|/|ig' \
+	"
+	# time ssh root@ssh.sandradodd.com "\
 		find /var/www/site/ -type f -name '*.html' | xargs \
 			sed -i --regexp-extended -e 's|http://(www\.)?sandradodd\.com|https://sd\.homeschooling\.md|ig' \
 	"
-	time ssh root@sd.homeschooling.md "\
+feedburner:
+	time ssh root@ssh.sandradodd.com "\
 		sed -i --regexp-extended -e 's|http://feeds\.feedburner\.com|https://feeds\.feedburner\.com|g' /var/www/site/index.html \
 	"
-	time ssh root@sd.homeschooling.md "\
-		find /var/www/site/ -type f -name '*.html' | xargs \
+
+charset:
+	time ssh root@ssh.sandradodd.com "\
+		sed -i --regexp-extended -e 's|charset=windows-1252|charset=utf-8|g' /var/www/site/sca/atenveldt/lockehavenHistory.html \
+	"
+	time ssh root@ssh.sandradodd.com "\
+		find /var/www/site/ -type f -name '*.htm*' | xargs \
 			sed -i -e 's|charset=iso-8859-1|charset=utf-8|ig' \
 	"
-	time ssh root@sd.homeschooling.md '\
-		find /var/www/site/ -type f -name "*.html" | while read file; do \
+
+encoding:
+	time ssh root@ssh.sandradodd.com '\
+		find /var/www/site/ -type f -name "*.htm*" | while read file; do \
 			encoding=`uchardet $$file`; \
 			if (( encoding != "UTF-8" && encoding != "ASCII" )); then \
 				echo "> $$file: $$encoding"; \
