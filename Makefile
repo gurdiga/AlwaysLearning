@@ -54,6 +54,10 @@ upload:
 
 copy: download rsync relative-links feedburner charset encoding
 
+ftp:
+	time lftp -u gurdiga@sandradodd.com ftp.sandradodd.com \
+		--password $(LFTP_PASSWORD)
+
 download:
 	time lftp -u gurdiga@sandradodd.com ftp.sandradodd.com \
 		--password $(LFTP_PASSWORD) \
