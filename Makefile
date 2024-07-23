@@ -1,13 +1,16 @@
-default: ssh
+default: build
+
+rsync:
+	rsync -avz _site/ root@ssh.sandradodd.com:/var/www/site/archive/AlwaysLearning
 
 ssh:
 	ssh root@ssh.sandradodd.com
 
 build:
-	bundle exec jekyll build --incremental
+	bundle exec jekyll build
 
 start:
-	bundle exec jekyll serve --incremental
+	bundle exec jekyll serve
 
 s: start
 
@@ -52,11 +55,11 @@ upload:
 			quit \
 		'
 
-copy: download rsync relative-links feedburner charset encoding
+copy: download rsync feedburner charset encoding
 
 ftp:
 	time lftp -u gurdiga@sandradodd.com ftp.sandradodd.com \
-		--password $(LFTP_PASSWORD)
+		--password $(LFTP_PASSWORD) $(ARGS)
 
 download:
 	time lftp -u gurdiga@sandradodd.com ftp.sandradodd.com \
@@ -69,27 +72,6 @@ download:
 				. site; \
 			quit \
 		"
-rsync:
-	time rsync -az site root@ssh.sandradodd.com:/var/www/
-
-misc-fixes:
-	mv /var/www/site/plants/falseseaonion.jpg /var/www/site/plants/falseseaonion.html
-	mv /var/www/site/animals/dogsandcats /var/www/site/animals/dogsandcats.html
-
-relative-links:
-	time ssh root@ssh.sandradodd.com "\
-		find /var/www/site/ -type f -name '*.htm*' | xargs \
-			sed -i --regexp-extended -e 's|http://(www\.)?sandradodd\.com/|/|ig' \
-	"
-	# time ssh root@ssh.sandradodd.com "\
-		find /var/www/site/ -type f -name '*.html' | xargs \
-			sed -i --regexp-extended -e 's|http://(www\.)?sandradodd\.com|https://sd\.homeschooling\.md|ig' \
-	"
-feedburner:
-	time ssh root@ssh.sandradodd.com "\
-		sed -i --regexp-extended -e 's|http://feeds\.feedburner\.com|https://feeds\.feedburner\.com|g' /var/www/site/index.html \
-	"
-
 charset:
 	time ssh root@ssh.sandradodd.com "\
 		sed -i --regexp-extended -e 's|charset=windows-1252|charset=utf-8|g' /var/www/site/sca/atenveldt/lockehavenHistory.html \
@@ -110,3 +92,19 @@ encoding:
 			fi; \
 		done \
 	'
+
+i: install
+install:
+	bundle install
+
+u: update
+update:
+	bundle update
+
+a: audit
+audit:
+	bundle exec bundle-audit
+
+au: audit-update
+audit-update:
+	bundle exec bundle-audit update
