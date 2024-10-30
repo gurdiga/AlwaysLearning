@@ -31,3 +31,6 @@ gem "kramdown-parser-gfm"
 gem "http_parser.rb"
 
 gem "bundle-audit"
+
+# Updates
+gem "rexml", ">= 3.3.9"
